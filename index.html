@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiệp Chúc Mừng 8/3</title>
+    <style>
+            @media (max-width: 480px) {
+        #flower {
+            width: 100px;
+        }
+
+        #message h1 {
+            font-size: 8vw;
+        }
+
+        #message p {
+            font-size: 4vw;
+        }
+
+        #cli {
+            font-size: 4vw;
+        }
+    }
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+            /* overflow: hidden; */
+            font-family: Arial, sans-serif;
+        }
+
+        #flower {
+            width: 200px;
+            height: auto;
+            display: ;
+            /* cursor: pointer; */
+            /* transition: opacity 0.5s; */
+            animation: flo 3s infinite ease-in-out;
+        }
+        @keyframes flo {
+                0% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.2);
+                }
+                
+            }
+
+
+        #fireworks {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        #message {
+            margin: 20% 10% 0 10%;
+            display: none;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        #message h1 {
+            font-size: 32px;
+            color: #ff69b4;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        #message p {
+            font-size: 15px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+            
+
+        .heart {
+            color: #ff1493;
+        }
+        #cli {
+            background-color: #ff69b4;
+            color: white;
+            box-sizing: border-box;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+
+        }
+        @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    </style>
+</head>
+<body>
+    <img id="flower" src="https://tse1.mm.bing.net/th?id=OIG2.OETkW8GESdJUeBFV01u2&pid=ImgGn" alt="">
+    <canvas id="fireworks"></canvas>
+    <div id="message">
+        <h1>Chúc Mừng Ngày 8/3</h1>
+        <p>Xin gửi chúc mừng tới mọi người phụ nữ, đặc biệt hơn cả là người phụ nữ của anh. <br> Chúc bé luôn xinh tươi, hạnh phúc và thành công!</p>
+        <p class="heart">♥♥♥</p>
+        <p id='cli' >bé hãy luôn giữ nụ cười trên môi nhé</p>
+
+    </div>
+    <div id='card' style="display: none;flex-shrink: 0;flex-direction: column; width: 307px;height: 409px; border: #fff solid 1px;margin-top: 10%;background-color: #000; align-items: center; justify-content: center; overflow: hidden; border-radius: 5%; " >
+        <img style="z-index: 2;top: 0;margin-top: 0px;transform: translateY(-130px); position: relative;  width: 297px; height: 399px;bottom: 0;  border-radius: 5%;" src="https://scontent-nrt1-1.xx.fbcdn.net/v/t39.30808-6/481986375_655212936928469_1604495808809294876_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=833d8c&_nc_ohc=4EldUssoANAQ7kNvgHLssut&_nc_oc=AdiCO89kRPq_VXuZ1ctg0i91BpIRqycpLCemHrlvFeczCbfk3syk7rREk9019sozp3e4YzSu3iRTWt-Ygh7ZGkVU&_nc_zt=23&_nc_ht=scontent-nrt1-1.xx&_nc_gid=AaXF9IduhpeZlGK71ZLsVEJ&oh=00_AYE3wsjxgOS_lszfS9tt3m5gQPxUfpTeGCSdlS2pWnTAVw&oe=67D1A883" alt="">
+        <div id='bar' style="z-index: 1; width: 1000px;height: 200px;margin-top: -150%; background-image: linear-gradient(180deg, rgba(255, 0, 0, 0.881), rgb(6, 108, 243)); animation: spin 3s linear infinite;"></div>
+      <!-- thuộc tính ảnh phải relative để ăn theo thẻ cha, muốn fleckbox đề được lên nhau thì cần phải chỉnh đối tượng quay để lấy tâm quay, còn đối tượng ko áp dụng anmation thì chỉnh bằng tranform.
+       fleck shrink(dãn đối tượng con, sử dụng vs các dạng thẻ set size cứng, khi nhỏ hơn cho phép thì tự cutout) =0 ko cho phép =1 cho phép ép nhỏ -->
+    </div><br>
+    
+    <script>
+        const flower = document.getElementById('flower');
+        const fireworksCanvas = document.getElementById('fireworks');
+        const message = document.getElementById('message');
+        const ctx = fireworksCanvas.getContext('2d');
+
+        // Điều chỉnh kích thước canvas
+        fireworksCanvas.width = window.innerWidth;
+        fireworksCanvas.height = window.innerHeight;
+
+        // Hiệu ứng pháo hoa
+        function createFirework(x, y) {
+            const particles = [];
+            const particleCount = 100;
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    angle: Math.random() * Math.PI * 2,
+                    speed: Math.random() * 5 + 2,
+                    life: 1,
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`
+                });
+            }
+
+            return particles;
+        }
+
+        let fireworks = [];
+
+        function animateFireworks() {
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+            ctx.globalCompositeOperation = 'lighter';
+
+            for (let i = fireworks.length - 1; i >= 0; i--) {
+                const particles = fireworks[i];
+                for (let j = particles.length - 1; j >= 0; j--) {
+                    const p = particles[j];
+                    p.x += Math.cos(p.angle) * p.speed;
+                    p.y += Math.sin(p.angle) * p.speed;
+                    p.life -= 0.02;
+                    p.speed *= 0.99;
+
+                    if (p.life <= 0) {
+                        particles.splice(j, 1);
+                        continue;
+                    }
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                }
+                if (particles.length === 0) {
+                    fireworks.splice(i, 1);
+                }
+            }
+
+            if (fireworks.length > 0) {
+                requestAnimationFrame(animateFireworks);
+            } else {
+                fireworksCanvas.style.display = 'none';
+                message.style.display = 'block';
+                card.style.display = 'flex';
+                setTimeout(() => {
+                    message.style.opacity = 1;
+                }, 100);
+            }
+        }
+
+        // Sự kiện nhấp vào bông hoa
+        flower.addEventListener('click', (e) => {
+            flower.style.opacity = 0;
+            setTimeout(() => flower.style.display = 'none', 500);
+
+            const rect = flower.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+
+            fireworks.push(createFirework(x, y));
+            fireworks.push(createFirework(x + 50, y - 50));
+            fireworks.push(createFirework(x - 50, y - 50));
+
+            fireworksCanvas.style.display = 'block';
+            animateFireworks();
+        });
+
+        // Điều chỉnh lại canvas khi thay đổi kích thước cửa sổ
+        window.addEventListener('resize', () => {
+            fireworksCanvas.width = window.innerWidth;
+            fireworksCanvas.height = window.innerHeight;
+        });
+
+        // play audio
+        flower.addEventListener('click', playAudio);
+        function playAudio() {
+            var audio = new Audio('https://stream.nct.vn/NhacCuaTui2036/CoDuocKhongEmCover-XuanSam-8572944.mp3');
+            audio.currentTime = 20;
+            audio.play();
+        }
+
+        // Hiệu ứng trái tim
+    function ima() {
+        const heart = document.querySelector('.heartbeat');
+        heart.style.display = 'block';
+        message.style.display = 'none';
+    }
+    </script>
+</body>
+</html>
